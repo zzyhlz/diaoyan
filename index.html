@@ -158,6 +158,36 @@ body {
   background: #eff6ff;
 }
 
+.other-input {
+  margin-left: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 200px;
+  outline: none;
+}
+.other-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+.region-select {
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--rule);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  width: 100%;
+  max-width: 350px;
+  margin-bottom: 0.5rem;
+  background: white;
+  outline: none;
+  cursor: pointer;
+}
+.region-select:focus {
+  border-color: var(--accent);
+}
+
 .submit-btn {
   display: block;
   width: 100%;
@@ -371,7 +401,7 @@ body {
         <div class="stat-label">整体满意度</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number" id="stat-coverage">28</div>
+        <div class="stat-number" id="stat-coverage">32</div>
         <div class="stat-label">覆盖省份</div>
       </div>
     </div>
@@ -403,7 +433,10 @@ body {
           <label class="option-label"><input type="radio" name="q1" value="tourism"> 景区管理机构</label>
           <label class="option-label"><input type="radio" name="q1" value="industry"> 工业园区/企业</label>
           <label class="option-label"><input type="radio" name="q1" value="water"> 航道/水文管理部门</label>
-          <label class="option-label"><input type="radio" name="q1" value="other"> 其他</label>
+          <label class="option-label" id="q1-other-label">
+            <input type="radio" name="q1" value="other" id="q1-other-radio"> 其他
+            <input type="text" id="q1-other-text" class="other-input" placeholder="请填写您的单位类型" style="display:none;">
+          </label>
         </div>
       </div>
 
@@ -415,23 +448,43 @@ body {
           <label class="option-label"><input type="radio" name="q2" value="vision"> 传统视觉识别系统</label>
           <label class="option-label"><input type="radio" name="q2" value="none"> 无监测手段</label>
           <label class="option-label"><input type="radio" name="q2" value="mixed"> 多种方式混合使用</label>
+          <label class="option-label" id="q2-other-label">
+            <input type="radio" name="q2" value="other" id="q2-other-radio"> 其他
+            <input type="text" id="q2-other-text" class="other-input" placeholder="请填写您的监测方式" style="display:none;">
+          </label>
         </div>
       </div>
 
       <div class="question-block">
-        <div class="question-title"><span class="question-number">3</span>您认为当前水位监测存在的主要痛点是？（可多选）</div>
+        <div class="question-title"><span class="question-number">3</span>您所在的地区是？</div>
         <div class="options">
-          <label class="option-label"><input type="checkbox" name="q3" value="efficiency"> 人工巡检效率低</label>
-          <label class="option-label"><input type="checkbox" name="q3" value="accuracy"> 识别精度不足</label>
-          <label class="option-label"><input type="checkbox" name="q3" value="cost"> 设备成本过高</label>
-          <label class="option-label"><input type="checkbox" name="q3" value="environment"> 环境适应性差</label>
-          <label class="option-label"><input type="checkbox" name="q3" value="maintenance"> 维护困难/成本高</label>
-          <label class="option-label"><input type="checkbox" name="q3" value="realtime"> 无法实时监测</label>
+          <select class="region-select" id="regionProvince" onchange="updateCities()">
+            <option value="">请选择省份</option>
+          </select>
+          <select class="region-select" id="regionCity">
+            <option value="">请选择城市</option>
+          </select>
         </div>
       </div>
 
       <div class="question-block">
-        <div class="question-title"><span class="question-number">4</span>您对智能水尺产品的了解程度是？</div>
+        <div class="question-title"><span class="question-number">4</span>您认为当前水位监测存在的主要痛点是？（可多选）</div>
+        <div class="options">
+          <label class="option-label"><input type="checkbox" name="q4" value="efficiency"> 人工巡检效率低</label>
+          <label class="option-label"><input type="checkbox" name="q4" value="accuracy"> 识别精度不足</label>
+          <label class="option-label"><input type="checkbox" name="q4" value="cost"> 设备成本过高</label>
+          <label class="option-label"><input type="checkbox" name="q4" value="environment"> 环境适应性差</label>
+          <label class="option-label"><input type="checkbox" name="q4" value="maintenance"> 维护困难/成本高</label>
+          <label class="option-label"><input type="checkbox" name="q4" value="realtime"> 无法实时监测</label>
+          <label class="option-label" id="q4-other-label">
+            <input type="checkbox" name="q4" value="other" id="q4-other-check"> 其他
+            <input type="text" id="q4-other-text" class="other-input" placeholder="请填写其他痛点" style="display:none;">
+          </label>
+        </div>
+      </div>
+
+      <div class="question-block">
+        <div class="question-title"><span class="question-number">5</span>您对智能水尺产品的了解程度是？</div>
         <div class="options">
           <label class="option-label"><input type="radio" name="q4" value="very"> 非常了解，已在使用</label>
           <label class="option-label"><input type="radio" name="q4" value="somewhat"> 有一定了解，正在考虑</label>
@@ -441,7 +494,7 @@ body {
       </div>
 
       <div class="question-block">
-        <div class="question-title"><span class="question-number">5</span>您认为智能水尺最吸引您的特点是？（可多选）</div>
+        <div class="question-title"><span class="question-number">6</span>您认为智能水尺最吸引您的特点是？（可多选）</div>
         <div class="options">
           <label class="option-label"><input type="checkbox" name="q5" value="accuracy"> 高精度识别（误差≤1cm）</label>
           <label class="option-label"><input type="checkbox" name="q5" value="allweather"> 全天候实时监测</label>
@@ -453,7 +506,7 @@ body {
       </div>
 
       <div class="question-block">
-        <div class="question-title"><span class="question-number">6</span>您对"硬件+平台+服务"模式的接受度是？</div>
+        <div class="question-title"><span class="question-number">7</span>您对"硬件+平台+服务"模式的接受度是？</div>
         <div class="options">
           <label class="option-label"><input type="radio" name="q6" value="very"> 非常接受，愿意长期订阅</label>
           <label class="option-label"><input type="radio" name="q6" value="somewhat"> 比较接受，看性价比</label>
@@ -463,7 +516,7 @@ body {
       </div>
 
       <div class="question-block">
-        <div class="question-title"><span class="question-number">7</span>您预计在未来1年内采购智能监测设备的预算是？</div>
+        <div class="question-title"><span class="question-number">8</span>您预计在未来1年内采购智能监测设备的预算是？</div>
         <div class="options">
           <label class="option-label"><input type="radio" name="q7" value="low"> 5万元以下</label>
           <label class="option-label"><input type="radio" name="q7" value="medium"> 5-20万元</label>
@@ -474,7 +527,7 @@ body {
       </div>
 
       <div class="question-block">
-        <div class="question-title"><span class="question-number">8</span>您对尺水丈安智能水尺的整体满意度是？</div>
+        <div class="question-title"><span class="question-number">9</span>您对尺水丈安智能水尺的整体满意度是？</div>
         <div class="options">
           <label class="option-label"><input type="radio" name="q8" value="5"> 非常满意</label>
           <label class="option-label"><input type="radio" name="q8" value="4"> 满意</label>
@@ -557,6 +610,88 @@ body {
 <div class="toast" id="toast">提交成功！感谢您的参与。</div>
 
 <script>
+// ==================== Province/City Data ====================
+const regionData = {
+  '北京': ['东城区','西城区','朝阳区','丰台区','石景山区','海淀区','顺义区','通州区','大兴区','昌平区'],
+  '天津': ['和平区','河东区','河西区','南开区','河北区','红桥区','滨海新区','东丽区','西青区','津南区'],
+  '上海': ['黄浦区','徐汇区','长宁区','静安区','普陀区','虹口区','杨浦区','浦东新区','闵行区','宝山区'],
+  '重庆': ['渝中区','大渡口区','江北区','沙坪坝区','九龙坡区','南岸区','北碚区','渝北区','巴南区','万州区'],
+  '河北': ['石家庄','唐山','秦皇岛','邯郸','邢台','保定','张家口','承德','沧州','廊坊','衡水'],
+  '山西': ['太原','大同','阳泉','长治','晋城','朔州','晋中','运城','忻州','临汾','吕梁'],
+  '辽宁': ['沈阳','大连','鞍山','抚顺','本溪','丹东','锦州','营口','阜新','辽阳','盘锦'],
+  '吉林': ['长春','吉林','四平','辽源','通化','白山','松原','白城','延边'],
+  '黑龙江': ['哈尔滨','齐齐哈尔','鸡西','鹤岗','双鸭山','大庆','伊春','佳木斯','七台河','牡丹江'],
+  '江苏': ['南京','无锡','徐州','常州','苏州','南通','连云港','淮安','盐城','扬州','镇江','泰州'],
+  '浙江': ['杭州','宁波','温州','嘉兴','湖州','绍兴','金华','衢州','舟山','台州','丽水'],
+  '安徽': ['合肥','芜湖','蚌埠','淮南','马鞍山','淮北','铜陵','安庆','黄山','滁州','阜阳','宿州'],
+  '福建': ['福州','厦门','莆田','三明','泉州','漳州','南平','龙岩','宁德'],
+  '江西': ['南昌','景德镇','萍乡','九江','新余','鹰潭','赣州','吉安','宜春','抚州','上饶'],
+  '山东': ['济南','青岛','淄博','枣庄','东营','烟台','潍坊','济宁','泰安','威海','日照','临沂','德州'],
+  '河南': ['郑州','开封','洛阳','平顶山','安阳','鹤壁','新乡','焦作','濮阳','许昌','漯河','南阳','商丘'],
+  '湖北': ['武汉','黄石','十堰','宜昌','襄阳','鄂州','荆门','孝感','荆州','黄冈','咸宁','随州','恩施'],
+  '湖南': ['长沙','株洲','湘潭','衡阳','邵阳','岳阳','常德','张家界','益阳','郴州','永州','怀化','娄底'],
+  '广东': ['广州','深圳','珠海','汕头','佛山','韶关','湛江','肇庆','江门','茂名','惠州','梅州','清远'],
+  '广西': ['南宁','柳州','桂林','梧州','北海','防城港','钦州','贵港','玉林','百色','贺州','河池'],
+  '海南': ['海口','三亚','三沙','儋州','琼海','万宁','文昌'],
+  '四川': ['成都','自贡','攀枝花','泸州','德阳','绵阳','广元','遂宁','内江','乐山','南充','眉山','宜宾'],
+  '贵州': ['贵阳','六盘水','遵义','安顺','毕节','铜仁','黔西南','黔东南','黔南'],
+  '云南': ['昆明','曲靖','玉溪','保山','昭通','丽江','普洱','临沧','楚雄','红河','文山','大理'],
+  '西藏': ['拉萨','日喀则','昌都','林芝','山南','那曲','阿里'],
+  '陕西': ['西安','铜川','宝鸡','咸阳','渭南','延安','汉中','榆林','安康','商洛'],
+  '甘肃': ['兰州','嘉峪关','金昌','白银','天水','武威','张掖','平凉','酒泉','庆阳','定西','陇南'],
+  '青海': ['西宁','海东','海北','黄南','海南州','果洛','玉树','海西'],
+  '宁夏': ['银川','石嘴山','吴忠','固原','中卫'],
+  '新疆': ['乌鲁木齐','克拉玛依','吐鲁番','哈密','昌吉','博尔塔拉','巴音郭楞','阿克苏','喀什','和田'],
+  '内蒙古': ['呼和浩特','包头','乌海','赤峰','通辽','鄂尔多斯','呼伦贝尔','巴彦淖尔','乌兰察布']
+};
+
+// Populate province select
+const provinceSelect = document.getElementById('regionProvince');
+Object.keys(regionData).forEach(p => {
+  const opt = document.createElement('option');
+  opt.value = p; opt.textContent = p;
+  provinceSelect.appendChild(opt);
+});
+
+function updateCities() {
+  const citySelect = document.getElementById('regionCity');
+  const province = provinceSelect.value;
+  citySelect.innerHTML = '<option value="">请选择城市</option>';
+  if (province && regionData[province]) {
+    regionData[province].forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c; opt.textContent = c;
+      citySelect.appendChild(opt);
+    });
+  }
+}
+
+// ==================== "Other" Input Toggle ====================
+function setupOtherToggle(radioId, textId) {
+  const radio = document.getElementById(radioId);
+  const text = document.getElementById(textId);
+  if (radio && text) {
+    radio.addEventListener('change', function() {
+      text.style.display = this.checked ? 'inline-block' : 'none';
+      if (this.checked) text.focus();
+    });
+  }
+}
+function setupOtherCheck(checkId, textId) {
+  const check = document.getElementById(checkId);
+  const text = document.getElementById(textId);
+  if (check && text) {
+    check.addEventListener('change', function() {
+      text.style.display = this.checked ? 'inline-block' : 'none';
+      if (this.checked) text.focus();
+    });
+  }
+}
+
+setupOtherToggle('q1-other-radio', 'q1-other-text');
+setupOtherToggle('q2-other-radio', 'q2-other-text');
+setupOtherCheck('q4-other-check', 'q4-other-text');
+
 // ==================== Data Generation ====================
 const unitTypes = {
   government: { label: '政府水利部门', tag: 'tag-government' },
@@ -604,11 +739,12 @@ const budgets = {
 // Generate 2308 survey reports
 function generateReports() {
   const reports = [];
-  const provinces = ['湖北', '湖南', '江西', '安徽', '河南', '四川', '云南', '贵州', '广西', '广东', 
-                     '福建', '浙江', '江苏', '山东', '河北', '山西', '陕西', '甘肃', '青海', '新疆',
-                     '西藏', '内蒙古', '辽宁', '吉林', '黑龙江', '海南', '重庆', '上海'];
+  const provinces = Object.keys(regionData);
   
   for (let i = 1; i <= 2308; i++) {
+    const province = provinces[Math.floor(Math.random() * provinces.length)];
+    const cities = regionData[province];
+    const city = cities[Math.floor(Math.random() * cities.length)];
     const typeKeys = Object.keys(unitTypes);
     const type = typeKeys[Math.floor(Math.random() * typeKeys.length)];
     const methodKeys = Object.keys(methods);
@@ -649,7 +785,8 @@ function generateReports() {
       features: selectedFeatures,
       budget,
       satisfaction,
-      province: provinces[Math.floor(Math.random() * provinces.length)],
+      province,
+      city,
       date: date.toISOString().split('T')[0],
       contact: `联系人${String.fromCharCode(65 + Math.floor(Math.random() * 26))}先生/女士`,
       phone: `1${[3,4,5,7,8][Math.floor(Math.random()*5)]}${String(Math.floor(Math.random()*999999999)).padStart(9,'0')}`
@@ -730,7 +867,7 @@ function renderReports(page = 1, filter = '', typeFilter = '') {
         <span class="report-tag ${unitTypes[r.type].tag}">${unitTypes[r.type].label}</span>
       </div>
       <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">
-        <strong>${r.province}</strong> · ${r.date}
+        <strong>${r.province} ${r.city}</strong> · ${r.date}
       </div>
       <div style="font-size: 0.85rem; color: var(--muted);">
         监测方式: ${methods[r.method]}<br>
@@ -772,7 +909,7 @@ function showReportDetail(id) {
     <div style="margin-bottom: 1rem;">
       <strong>报告编号:</strong> ${r.id}<br>
       <strong>调研日期:</strong> ${r.date}<br>
-      <strong>所在地区:</strong> ${r.province}<br>
+      <strong>所在地区:</strong> ${r.province} ${r.city}<br>
       <strong>单位类型:</strong> ${unitTypes[r.type].label}<br>
       <strong>联系人:</strong> ${r.contact}<br>
       <strong>联系电话:</strong> ${r.phone}
